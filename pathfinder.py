@@ -1,8 +1,9 @@
 class ShortestPath:
-
+    def __init__(self, file):
+        self.file = file
     file = 'elevation_test.txt'
 
-    def get_data():
+    def get_data(self):
         data = []
         with open(file, 'r') as f:
             lines = f.readlines()
@@ -12,6 +13,14 @@ class ShortestPath:
                 for j in range(len(lines[i])):
                     data[i].append(int(lines[i][j]))
             return data
+
+
+class Pixels:
+    def __init__(self, data):
+        self.data = data
+
+    def next_step(self, pixel):
+        
 
 
 if __name__ == "__main__":

@@ -1,20 +1,17 @@
-from subprocess import CREATE_NEW_CONSOLE
 from PIL import Image
 
-class File:
-    def __init__(self, file):
-        self.file = file
 
-    def get_data(self):
-        data = []
-        with open(file, 'r') as f:
-            lines = f.readlines()
-            for i in range(len(lines)):
-                lines[i] = lines[i].split()
-                data.append([])
-                for j in range(len(lines[i])):
-                    data[i].append(int(lines[i][j]))
-            return data
+def get_data(file):
+    data = []
+    with open(file, 'r') as f:
+        lines = f.readlines()
+        for i in range(len(lines)):
+            lines[i] = lines[i].split()
+            data.append([])
+            for j in range(len(lines[i])):
+                data[i].append(int(lines[i][j]))
+        return data
+
 
 '''
 class Pixel:
@@ -31,15 +28,17 @@ class Pixel:
         right_down = 
 '''
 
+file = 'elevation_test.txt'
+
 def create_image(file):
     pixels = get_data(file)
-    Image.new('RGBA' , (600, 600), 'white')
-    Image.save('file_name.png')
+    new_image = Image.new('RGBA' , (600, 600), 'white')
+    new_image.save('file_name.png')
 
 
 create_image('elevation_small.txt')
 
-
+'''
 if __name__ == "__main__":
     import argparse
     from pathlib import Path
@@ -54,3 +53,4 @@ if __name__ == "__main__":
     else:
         print(f"{file} does not exist!")
         exit(1)
+'''

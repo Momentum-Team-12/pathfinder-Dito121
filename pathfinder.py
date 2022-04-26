@@ -1,16 +1,21 @@
 from PIL import Image
+from PIL import ImageColor
+import numpy as np
 
 
 def get_data(file):
-    data = []
+    elevation_data = []
+
     with open(file, 'r') as f:
         lines = f.readlines()
+
         for i in range(len(lines)):
             lines[i] = lines[i].split()
-            data.append([])
+            elevation_data.append([])
+
             for j in range(len(lines[i])):
-                data[i].append(int(lines[i][j]))
-        return data
+                elevation_data[i].append(int(lines[i][j]))
+        return elevation_data
 
 
 '''
@@ -28,15 +33,30 @@ class Pixel:
         right_down = 
 '''
 
-file = 'elevation_test.txt'
-
-def create_image(file):
-    pixels = get_data(file)
-    new_image = Image.new('RGBA' , (600, 600), 'white')
-    new_image.save('file_name.png')
+file = 'elevation_small.txt'
 
 
-create_image('elevation_small.txt')
+def create_image(file, size=(600,600)):
+    elevation_data = get_data(file)
+    new_image = Image.new('RGBA' , size, 'white')
+    new_image.save('elevation_small.png')
+    return elevation_data, new_image
+
+
+def modify_image():
+    elevation_data, new_image = create_image(file)
+    max_elevation = np.amax(elevation_data)
+    min_elevation = np.amin(elevation_data)
+
+    for x in range(len(elevation_data)):
+        for y in range(len(elevation_data[x])):
+            current_elevation = elevation_data[x][y]
+            A = (current_elevation - min_elevation) // ((max_elevation - min_elevation)//256 + 1)
+            new_image.getpixel((0, 0))
+            new_image.putpixel((x, y), (255-A, 255-A, 255-A))
+
+
+modify_image()
 
 '''
 if __name__ == "__main__":

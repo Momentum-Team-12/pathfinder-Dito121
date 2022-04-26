@@ -1,10 +1,17 @@
-def get_data(file):
-    data = []
-    with open(file, 'r', encoding='utf8') as f:
-        lines = f.readlines()
-        for i in range(len(lines)):
-            data.append(lines[i].split())
-        return data
+class ShortestPath:
+
+    file = 'elevation_test.txt'
+
+    def get_data():
+        data = []
+        with open(file, 'r') as f:
+            lines = f.readlines()
+            for i in range(len(lines)):
+                lines[i] = lines[i].split()
+                data.append([])
+                for j in range(len(lines[i])):
+                    data[i].append(int(lines[i][j]))
+            return data
 
 
 if __name__ == "__main__":

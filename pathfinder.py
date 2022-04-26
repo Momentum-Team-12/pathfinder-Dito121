@@ -33,18 +33,13 @@ class Pixel:
         right_down = 
 '''
 
-file = 'elevation_small.txt'
 
-
-def create_image(file, size=(600,600)):
+def modify_image(file, new_image):
     elevation_data = get_data(file)
-    new_image = Image.new('RGBA' , size, 'white')
-    new_image.save('elevation_small.png')
-    return elevation_data, new_image
+    size = (len(elevation_data), len(elevation_data))
+    image = Image.new('RGBA', size, 'white')
+    image.save(new_image)
 
-
-def modify_image():
-    elevation_data, new_image = create_image(file)
     max_elevation = np.amax(elevation_data)
     min_elevation = np.amin(elevation_data)
 
@@ -52,11 +47,11 @@ def modify_image():
         for y in range(len(elevation_data[x])):
             current_elevation = elevation_data[x][y]
             A = (current_elevation - min_elevation) // ((max_elevation - min_elevation)//256 + 1)
-            new_image.putpixel((y, x), (A, A, A, 255))
-    new_image.save('elevation_small.png')
+            image.putpixel((y, x), (A, A, A, 255))
+    image.save(new_image)
 
 
-modify_image()
+modify_image('elevation_small.txt', 'elevation_small.png')
 
 '''
 if __name__ == "__main__":

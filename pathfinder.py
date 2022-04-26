@@ -52,8 +52,8 @@ def modify_image():
         for y in range(len(elevation_data[x])):
             current_elevation = elevation_data[x][y]
             A = (current_elevation - min_elevation) // ((max_elevation - min_elevation)//256 + 1)
-            new_image.getpixel((0, 0))
-            new_image.putpixel((x, y), (255-A, 255-A, 255-A))
+            new_image.putpixel((y, x), (A, A, A, 255))
+    new_image.save('elevation_small.png')
 
 
 modify_image()

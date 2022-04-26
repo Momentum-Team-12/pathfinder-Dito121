@@ -1,7 +1,9 @@
-class ShortestPath:
+from subprocess import CREATE_NEW_CONSOLE
+from PIL import Image
+
+class File:
     def __init__(self, file):
         self.file = file
-    file = 'elevation_test.txt'
 
     def get_data(self):
         data = []
@@ -14,13 +16,28 @@ class ShortestPath:
                     data[i].append(int(lines[i][j]))
             return data
 
-
-class Pixels:
-    def __init__(self, data):
+'''
+class Pixel:
+    def __init__(self, pixels):
         self.data = data
 
-    def next_step(self, pixel):
-        
+    def get_rgba(self, pixels):
+        for i in range(len(pixels)):
+
+
+    def next_step(self, pixels):
+        right_up = 
+        right = 
+        right_down = 
+'''
+
+def create_image(file):
+    pixels = get_data(file)
+    Image.new('RGBA' , (600, 600), 'white')
+    Image.save('file_name.png')
+
+
+create_image('elevation_small.txt')
 
 
 if __name__ == "__main__":

@@ -1,5 +1,4 @@
 from PIL import Image
-from PIL import ImageColor
 import numpy as np
 
 
@@ -53,7 +52,7 @@ def modify_image(file, new_image):
 
 modify_image('elevation_small.txt', 'elevation_small.png')
 
-'''
+
 if __name__ == "__main__":
     import argparse
     from pathlib import Path
@@ -68,4 +67,3 @@ if __name__ == "__main__":
     else:
         print(f"{file} does not exist!")
         exit(1)
-'''

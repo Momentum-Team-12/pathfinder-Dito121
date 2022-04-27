@@ -87,17 +87,23 @@ class TopoMap:
                 self.image.putpixel(list_of_paths[i][j], ImageColor.getcolor('red', 'RGBA'))
         self.image.save(self.name_png)
 
+'''
+elevation_large = TopoMap('elevation_large.txt')
+elevation_large.txt_to_png()
 
+for i in range(len(elevation_large.data)):
+    elevation_large.find_greedy_path(i)
+
+elevation_large.chart_greedy_path()
+'''
+
+'''
 elevation_small = TopoMap('elevation_small.txt')
 elevation_small.txt_to_png()
 
 for i in range(len(elevation_small.data)):
     elevation_small.find_greedy_path(i)
 
-elevation_small.chart_greedy_path()
-
-'''
-elevation_small.find_greedy_path(300)
 elevation_small.chart_greedy_path()
 '''
 

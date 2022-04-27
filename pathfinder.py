@@ -3,7 +3,7 @@ from PIL import ImageColor
 import numpy as np
 import random
 
-
+list_of_paths = []
 class TopoMap:
     # file_name is name of text file with elevation data
     def __init__(self, name_txt):
@@ -47,9 +47,17 @@ class TopoMap:
         self.path.append((col, row))
 
         while col < len(self.data[row])-1:
-            right_up = self.data[row-1][col+1]
-            right_down = self.data[row+1][col+1]
             right = self.data[row][col+1]
+
+            if row-1 < 0:
+                right_up = right
+            else:
+                right_up = self.data[row-1][col+1]
+
+            if row+1 >= len(self.data):
+                right_down = right
+            else:
+                right_down = self.data[row+1][col+1]
 
             diffs = [abs(current-right), abs(current-right_down), abs(current-right_up)]
             min_diff = min(diffs)
@@ -71,25 +79,27 @@ class TopoMap:
 
             col += 1
             self.path.append((col, row))
+        list_of_paths.append(self.path)
 
     def chart_greedy_path(self):
-        # self.test_answer = [(0,6), (1,5), (2,4), (3,3), (4,2), (5,3), (6,2), (7,2), (8,3), (9,4), (10,5), (11,5), (12,5), (13,6)]
-        for i in range(len(self.path)):
-            self.image.putpixel(self.path[i], ImageColor.getcolor('red', 'RGBA'))
+        for i in range(len(list_of_paths)):
+            for j in range(len(list_of_paths[i])):
+                self.image.putpixel(list_of_paths[i][j], ImageColor.getcolor('red', 'RGBA'))
         self.image.save(self.name_png)
 
 
 elevation_small = TopoMap('elevation_small.txt')
 elevation_small.txt_to_png()
-'''
-list_of_paths = []
+
 for i in range(len(elevation_small.data)):
-    list_of_paths.append(elevation_small.find_greedy_path(i))
-for i in range(len(list_of_paths)):
-    elevation_small.chart_greedy_path(i)
+    elevation_small.find_greedy_path(i)
+
+elevation_small.chart_greedy_path()
+
 '''
 elevation_small.find_greedy_path(300)
 elevation_small.chart_greedy_path()
+'''
 
 '''
 elevation_test = TopoMap('elevation_test.txt')

@@ -1,4 +1,3 @@
-from operator import ne
 from PIL import Image
 import numpy as np
 
@@ -7,12 +6,8 @@ class TextFile:
     # file_name is name of text file with elevation data
     def __init__(self, name_txt):
         self.name_txt = name_txt
-
-    def get_name_txt(self):
-        return self.name_txt
-
-    def get_name_png(self):
-        return self.name_txt[:-4] + '.png'
+        self.name_png = self.name_txt[:-3] + 'png'
+        self.set_data()
 
     def set_data(self):
         self.data = []
@@ -31,34 +26,20 @@ class TextFile:
         self.max_data = np.amax(self.data)
         self.size_data = (len(self.data), len(self.data[0]))
 
-    def get_data(self):
-        return self.data
-
-    def get_max_data(self):
-        return self.max_data
-
-    def get_min_data(self):
-        return self.min_data
-
-    def get_size_data(self):
-        return self.size_data
-
-    def text_to_png(self):
-        size = self.get_size_data()
-        self.image = Image.new('RGBA', size, 'white')
-        self.image.save(self.get_name_png())
+    def txt_to_png(self):
+        self.image = Image.new('RGBA', self.size_data, 'white')
+        self.image.save(self.name_png)
 
         for x in range(len(self.data)):
             for y in range(len(self.data[x])):
                 current_data_element = self.data[x][y]
                 grayscale = (current_data_element - self.min_data) // ((self.max_data - self.min_data)//256 + 1)
                 self.image.putpixel((y, x), (grayscale, grayscale, grayscale, 255))
-        self.image.save(self.get_name_png())
+        self.image.save(self.name_png)
 
 
 elevation_small = TextFile('elevation_small.txt')
-elevation_small.set_data()
-elevation_small.text_to_png()
+elevation_small.txt_to_png()
 
 
 '''

@@ -88,11 +88,6 @@ class TopoMap:
         list_of_sums.append(self.sum)
 
     def chart_greedy_path(self, paths=list_of_paths, color='red'):
-        if len(paths) == 1:
-            for i in range(len(paths[0])):
-                self.image.putpixel(paths[0][i], ImageColor.getcolor(color, 'RGBA'))
-            self.image.save(self.name_png)
-            return
 
         for i in range(len(paths)):
             for j in range(len(paths[i])):

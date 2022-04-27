@@ -4,8 +4,11 @@ import numpy as np
 import random
 
 list_of_paths = []
+list_of_sums = []
+smallest_change_paths = []
+
+
 class TopoMap:
-    # file_name is name of text file with elevation data
     def __init__(self, name_txt):
         self.name_txt = name_txt
         self.name_png = self.name_txt[:-3] + 'png'
@@ -42,6 +45,7 @@ class TopoMap:
     def find_greedy_path(self, starting_row):
         row = starting_row
         col = 0
+        self.sum = 0
         self.path = []
         current = self.data[row][col]
         self.path.append((col, row))
@@ -61,6 +65,7 @@ class TopoMap:
 
             diffs = [abs(current-right), abs(current-right_down), abs(current-right_up)]
             min_diff = min(diffs)
+            self.sum += min_diff
 
             if min_diff == diffs[0]:
                 current = right
@@ -80,22 +85,20 @@ class TopoMap:
             col += 1
             self.path.append((col, row))
         list_of_paths.append(self.path)
+        list_of_sums.append(self.sum)
 
-    def chart_greedy_path(self):
-        for i in range(len(list_of_paths)):
-            for j in range(len(list_of_paths[i])):
-                self.image.putpixel(list_of_paths[i][j], ImageColor.getcolor('red', 'RGBA'))
+    def chart_greedy_path(self, paths=list_of_paths, color='red'):
+        if len(paths) == 1:
+            for i in range(len(paths[0])):
+                self.image.putpixel(paths[0][i], ImageColor.getcolor(color, 'RGBA'))
+            self.image.save(self.name_png)
+            return
+
+        for i in range(len(paths)):
+            for j in range(len(paths[i])):
+                self.image.putpixel(paths[i][j], ImageColor.getcolor(color, 'RGBA'))
         self.image.save(self.name_png)
 
-'''
-elevation_large = TopoMap('elevation_large.txt')
-elevation_large.txt_to_png()
-
-for i in range(len(elevation_large.data)):
-    elevation_large.find_greedy_path(i)
-
-elevation_large.chart_greedy_path()
-'''
 
 '''
 elevation_small = TopoMap('elevation_small.txt')
@@ -104,7 +107,29 @@ elevation_small.txt_to_png()
 for i in range(len(elevation_small.data)):
     elevation_small.find_greedy_path(i)
 
+smallest_change = min(list_of_sums)
+for i in range(len(list_of_sums)):
+    if list_of_sums[i] == smallest_change:
+        smallest_change_paths.append(list_of_paths[i])
+
 elevation_small.chart_greedy_path()
+elevation_small.chart_greedy_path(paths=smallest_change_paths, color='blue')
+'''
+
+'''
+elevation_large = TopoMap('elevation_large.txt')
+elevation_large.txt_to_png()
+
+for i in range(len(elevation_large.data)):
+    elevation_large.find_greedy_path(i)
+
+smallest_change = min(list_of_sums)
+for i in range(len(list_of_sums)):
+    if list_of_sums[i] == smallest_change:
+        smallest_change_paths.append(list_of_paths[i])
+
+elevation_large.chart_greedy_path()
+elevation_large.chart_greedy_path(paths=smallest_change_paths, color='blue')
 '''
 
 '''

@@ -1,7 +1,7 @@
 Plan for how to complete this project:
 
 1. create test file and manually find answer when starting in row 7.
-test_answer = [(6,0), (5,1), (4,2), (3,3), (2,4), (3,5), (2,6), (2,7), (3,8), (4,9), (5,10), (5,11), (5,12), (6,13)]
+test_answer = [(0,6), (1,5), (2,4), (3,3), (4,2), (5,3), (6,2), (7,2), (8,3), (9,4), (10,5), (11,5), (12,5), (13,6)]
 
 2. 
 

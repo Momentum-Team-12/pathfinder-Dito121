@@ -1,4 +1,5 @@
 from PIL import Image
+from PIL import ImageColor
 import numpy as np
 
 
@@ -37,17 +38,24 @@ class TextFile:
                 self.image.putpixel((y, x), (grayscale, grayscale, grayscale, 255))
         self.image.save(self.name_png)
 
+    def greedy_path(self):
+        right = 
 
-elevation_small = TextFile('elevation_small.txt')
-elevation_small.txt_to_png()
+    def chart_greedy_path(self):
+        self.test_answer = [(0,6), (1,5), (2,4), (3,3), (4,2), (5,3), (6,2), (7,2), (8,3), (9,4), (10,5), (11,5), (12,5), (13,6)]
+        for i in range(len(self.test_answer)):
+            self.image.putpixel(self.test_answer[i], ImageColor.getcolor('red', 'RGBA'))
+        self.image.save(self.name_png)
+
+# elevation_small = TextFile('elevation_small.txt')
+# elevation_small.txt_to_png()
 
 
-'''
-def next_step(self, pixels):
-    right_up = 
-    right = 
-    right_down = 
-'''
+elevation_test = TextFile('elevation_test.txt')
+elevation_test.txt_to_png()
+elevation_test.chart_greedy_path()
+
+
 
 '''
 if __name__ == "__main__":

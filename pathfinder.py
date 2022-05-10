@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from PIL import Image
 from PIL import ImageColor
 import numpy as np
@@ -11,8 +12,9 @@ smallest_change_paths = []
 class TopoMap:
     def __init__(self, name_txt):
         self.name_txt = name_txt
-        self.name_png = self.name_txt[:-3] + 'png'
+        self.name_png = f'{self.name_txt[:-3]}png'
         self.set_data()
+        self.txt_to_png()
 
     def set_data(self):
         self.data = []
@@ -33,7 +35,6 @@ class TopoMap:
 
     def txt_to_png(self):
         self.image = Image.new('RGBA', self.size_data, 'white')
-        self.image.save(self.name_png)
 
         for row in range(len(self.data)):
             for col in range(len(self.data[row])):
@@ -46,31 +47,25 @@ class TopoMap:
         row = starting_row
         col = 0
         self.sum = 0
-        self.path = []
+        self.path = OrderedDict()
         current = self.data[row][col]
-        self.path.append((col, row))
+        self.path[(col, row)] = self.data[row][col]
 
         while col < len(self.data[row])-1:
             right = self.data[row][col+1]
 
-            if row-1 < 0:
-                right_up = right
-            else:
-                right_up = self.data[row-1][col+1]
+            right_up = right if row < 1 else self.data[row-1][col+1]
 
-            if row+1 >= len(self.data):
-                right_down = right
-            else:
-                right_down = self.data[row+1][col+1]
+            right_down = right if row+1 >= len(self.data) else self.data[row+1][col+1]
 
-            diffs = [abs(current-right), abs(current-right_down), abs(current-right_up)]
+            diffs = [abs(current - right), abs(current - right_down), abs(current - right_up)]
             min_diff = min(diffs)
             self.sum += min_diff
 
             if min_diff == diffs[0]:
                 current = right
             elif diffs[1] == diffs[2] == min_diff:
-                current = diffs[random.randint(1,2)]
+                current = diffs[random.randint(1, 2)]
                 if current == right_down:
                     row += 1
                 else:
@@ -83,21 +78,20 @@ class TopoMap:
                 row -= 1
 
             col += 1
-            self.path.append((col, row))
+            self.path[(col, row)] = self.data[row][col]
+
         list_of_paths.append(self.path)
         list_of_sums.append(self.sum)
 
     def chart_greedy_path(self, paths=list_of_paths, color='red'):
 
         for i in range(len(paths)):
-            for j in range(len(paths[i])):
-                self.image.putpixel(paths[i][j], ImageColor.getcolor(color, 'RGBA'))
+            for key in paths[i]:
+                self.image.putpixel(key, ImageColor.getcolor(color, 'RGBA'))
         self.image.save(self.name_png)
-
 
 '''
 elevation_small = TopoMap('elevation_small.txt')
-elevation_small.txt_to_png()
 
 for i in range(len(elevation_small.data)):
     elevation_small.find_greedy_path(i)
@@ -113,7 +107,6 @@ elevation_small.chart_greedy_path(paths=smallest_change_paths, color='blue')
 
 '''
 elevation_large = TopoMap('elevation_large.txt')
-elevation_large.txt_to_png()
 
 for i in range(len(elevation_large.data)):
     elevation_large.find_greedy_path(i)

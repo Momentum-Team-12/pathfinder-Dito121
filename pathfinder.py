@@ -17,30 +17,35 @@ class TopoMap:
         self.txt_to_png()
 
     def set_data(self):
-        self.data = []
+        self.data = OrderedDict()
+        self.min_data = 10000
+        self.max_data = 0
 
         with open(self.name_txt, 'r') as f:
             lines = f.readlines()
+            width = 0
+            height = 0
 
             for i in range(len(lines)):
                 lines[i] = lines[i].split()
-                self.data.append([])
+                height += 1
 
                 for j in range(len(lines[i])):
-                    self.data[i].append(int(lines[i][j]))
+                    if i == 0:
+                        width += 1
 
-        self.min_data = np.amin(self.data)
-        self.max_data = np.amax(self.data)
-        self.size_data = (len(self.data), len(self.data[0]))
+                    self.data[(i, j)] = int(lines[i][j])
+                    self.min_data = min(self.min_data, self.data[(i, j)])
+                    self.max_data = max(self.max_data, self.data[(i, j)])
+
+            self.size_data = (width, height)
 
     def txt_to_png(self):
         self.image = Image.new('RGBA', self.size_data, 'white')
 
-        for row in range(len(self.data)):
-            for col in range(len(self.data[row])):
-                current_data_element = self.data[row][col]
-                grayscale = (current_data_element - self.min_data) // ((self.max_data - self.min_data)//256 + 1)
-                self.image.putpixel((col, row), (grayscale, grayscale, grayscale, 255))
+        for key, value in self.data.items():
+            grayscale = (value - self.min_data) // ((self.max_data - self.min_data)//256 + 1)
+            self.image.putpixel((key[1], key[0]), (grayscale, grayscale, grayscale, 255))
         self.image.save(self.name_png)
 
     def find_greedy_path(self, starting_row):
@@ -48,15 +53,15 @@ class TopoMap:
         col = 0
         self.sum = 0
         self.path = OrderedDict()
-        current = self.data[row][col]
-        self.path[(col, row)] = self.data[row][col]
+        current = self.data[(row, col)]
+        self.path[(col, row)] = self.data[(row, col)]
 
-        while col < len(self.data[row])-1:
-            right = self.data[row][col+1]
+        while col < self.size_data[1]-1:
+            right = self.data[(row, col+1)]
 
-            right_up = right if row < 1 else self.data[row-1][col+1]
+            right_up = right if row < 1 else self.data[(row-1, col+1)]
 
-            right_down = right if row+1 >= len(self.data) else self.data[row+1][col+1]
+            right_down = right if row+1 >= self.size_data[0] else self.data[(row+1, col+1)]
 
             diffs = [abs(current - right), abs(current - right_down), abs(current - right_up)]
             min_diff = min(diffs)
@@ -78,7 +83,7 @@ class TopoMap:
                 row -= 1
 
             col += 1
-            self.path[(col, row)] = self.data[row][col]
+            self.path[(col, row)] = self.data[(row, col)]
 
         list_of_paths.append(self.path)
         list_of_sums.append(self.sum)
@@ -93,7 +98,7 @@ class TopoMap:
 '''
 elevation_small = TopoMap('elevation_small.txt')
 
-for i in range(len(elevation_small.data)):
+for i in range(elevation_small.size_data[0]):
     elevation_small.find_greedy_path(i)
 
 smallest_change = min(list_of_sums)
@@ -108,7 +113,7 @@ elevation_small.chart_greedy_path(paths=smallest_change_paths, color='blue')
 '''
 elevation_large = TopoMap('elevation_large.txt')
 
-for i in range(len(elevation_large.data)):
+for i in range(elevation_large.size_data[0]):
     elevation_large.find_greedy_path(i)
 
 smallest_change = min(list_of_sums)

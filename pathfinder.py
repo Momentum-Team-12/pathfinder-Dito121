@@ -1,7 +1,6 @@
 from collections import OrderedDict
 from PIL import Image
 from PIL import ImageColor
-import numpy as np
 import random
 
 list_of_paths = []
@@ -94,6 +93,7 @@ class TopoMap:
             for key in paths[i]:
                 self.image.putpixel(key, ImageColor.getcolor(color, 'RGBA'))
         self.image.save(self.name_png)
+
 
 '''
 elevation_small = TopoMap('elevation_small.txt')
